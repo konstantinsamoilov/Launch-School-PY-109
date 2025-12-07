@@ -245,3 +245,26 @@ def center_of(string):
         return string[middle]
     else:
         return string[middle - 1:middle + 1]
+    
+# 12
+
+def negative(num):
+    if num > 0:
+        return (num * -1)
+    elif num <= 0:
+        return num
+    
+# def negative(num):
+#     return -abs(num)
+
+print(negative(5) == -5)      # True
+print(negative(-3) == -3)     # True
+print(negative(0) == 0)       # True
+
+# Second pass:
+
+def negative(num):
+    if num < 0:
+        return num
+    else:
+        return -num
