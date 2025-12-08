@@ -24,14 +24,6 @@ def crunch(s):
             result += char
     return result
 
-# These examples should all print True
-print(crunch('ddaaiillyy ddoouubbllee') == 'daily double')
-print(crunch('4444abcabccba') == '4abcabcba')
-print(crunch('ggggggggggggggg') == 'g')
-print(crunch('abc') == 'abc')
-print(crunch('a') == 'a')
-print(crunch('') == '')
-
 # Second pass (same, yeah this is by far the easiest):
 
 def crunch(s):
@@ -59,4 +51,99 @@ def crunch(string):
     # ''.join() combines them back into a string.
 
 # 3
+
+def print_in_box(s):
+    horizontal = '+' + ('-' * (len(s) + 2)) + '+'
+    message_line = f'| {s} |'
+    empty = '| ' + ' ' * len(s) + ' |'
+    
+    print(horizontal)
+    print(empty)
+    print(message_line)
+    print(empty)
+    print(horizontal)
+
+# Second pass:
+
+def print_in_box(string):
+    print('+' + '-' * (len(string) + 2) + '+')
+    print('|' + ' ' * (len(string) + 2) + '|')
+    print('|' + ' ' + string + ' ' + '|')
+    print('|' + ' ' * (len(string) + 2) + '|')
+    print('+' + '-' * (len(string) + 2) + '+')
+
+# Further exploration 1 first pass:
+
+def print_in_box(s, width = None):
+    if width is None:
+        inner_content_width = len(s)
+    else:
+        inner_content_width = max(0, width - 4)
+        
+    content = s[:inner_content_width]
+        
+    horizontal = '+' + ('-' * (inner_content_width + 2)) + '+'
+    message_line = '| ' + content.ljust(inner_content_width) + ' |'
+    empty = '| ' + ' ' * inner_content_width + ' |'
+        
+    print(horizontal)
+    print(empty)
+    print(message_line)
+    print(empty)
+    print(horizontal)
+
+# Further exploration 1 second pass:
+
+def print_in_box(string, width=None):
+    if width is None:
+        print('+' + '-' * (len(string) + 2) + '+')
+        print('|' + ' ' * (len(string) + 2) + '|')
+        print('|' + ' ' + string + ' ' + '|')
+        print('|' + ' ' * (len(string) + 2) + '|')
+        print('+' + '-' * (len(string) + 2) + '+')
+    else:
+        print('+' + '-' * (width + 2) + '+')
+        print('|' + ' ' * (width + 2) + '|')
+        print('|' + ' ' + string[:width] + ' ' + '|')
+        print('|' + ' ' * (width + 2) + '|')
+        print('+' + '-' * (width + 2) + '+')
+
+# Further exploration 2 (I think I didn't do it the first time):
+# Previous code would only be able to handle 2 string lines, I think, so we gotta re-do
+
+ 
+
+
+
+
+# 4
+
+def stringy(num):
+    if num % 2 == 0:
+        return "10" * (num // 2)
+    else:
+        return "10" * (num // 2) + '1' # this is so insane
+
+# Second pass:
+
+def stringy(num):
+    result = ''
+    i = 0
+
+    while i < num:
+        if i % 2 != 0:
+            result += '0'
+        else:
+            result += '1'
+        i += 1
+        
+    return result
+
+# 5
+
+def triangle(num):
+    for el in range(1, num + 1):
+        print(' ' * (num - el) + '*' * el)
+    
+# Second pass:
 
