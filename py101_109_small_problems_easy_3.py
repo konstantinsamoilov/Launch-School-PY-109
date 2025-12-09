@@ -109,9 +109,68 @@ def print_in_box(string, width=None):
         print('+' + '-' * (width + 2) + '+')
 
 # Further exploration 2 (I think I didn't do it the first time):
-# (previous code would only be able to handle 2 string lines, I think, so we gotta re-do.)
+# (Previous code would only be able to handle 2 string lines, I think, so we gotta re-do.)
+# LSBot helped fit this into existing code and I simplified it a little):
 
+def print_in_box(string, width=None):
+    if width is None:
+        content = string
+        inner_width = len(content)
+        print('+' + '-' * (inner_width + 2) + '+')
+        print('|' + ' ' * (inner_width + 2) + '|')
+        print('|' + ' ' + content + ' ' + '|')
+        print('|' + ' ' * (inner_width + 2) + '|')
+        print('+' + '-' * (inner_width + 2) + '+')
+        return
+    
+    # Otherwise:
+    lines = wrap_by_words(string, width)
+    
+    max_line_len = max((len(line) for line in lines), default=0) # getting the padding based on max line length
+    
+    print('+' + '-' * (max_line_len + 2) + '+')
+    print('|' + ' ' * (max_line_len + 2) + '|')
+    
+    for line in lines:
+        padding = ' ' * (max_line_len - len(line))
+        print('| ' + line + padding + ' |')
+        
+    print('|' + ' ' * (max_line_len + 2) + '|')
+    print('+' + '-' * (max_line_len + 2) + '+')
 
+def wrap_by_words(string, width):
+    if width <= 0:
+        return ['']
+
+    words = string.split() # Strings with multiple spaces will not be preserved, sadly
+    if not words:
+        return ['']
+
+    lines = []
+    line = words[0] # Any line will at least be the first word, as a string
+
+    for word in words[1:]:
+        if len(line) + 1 + len(word) <= width: # If len(first_word) + 1 (space in-between those two) + len(next_word)...
+            line += ' ' + word # first word + ' ' + second word, then check again
+        else:
+            lines.append(line) # If len(line) + 1 + len(word) > width, add the word / the line to lines
+            line = word # Here 'word' gets passed to 'line', and immediately after 'word' becomes another word
+
+    lines.append(line) # This line is here because the loop is unable to append the last line within the loop, we need to come out to do it
+    return lines
+
+# string: "Konstantin is doing a further exploration exercise"
+# width: 20
+
+# Start line = "Konstantin" (len 11)
+# Try "is": 11 + 1 + 2 = 14 → fits → "Konstantin is"
+# Try "doing": 14 + 1 + 5 = 20 → fits → "Konstantin is doing"
+# Try "a": 20 + 1 + 1 = 22 → doesn’t fit → append current line, start new line with "a"
+# Try "further": "a" (1) + 1 + 7 = 9 → fits → "a further"
+# Try "exploration": 9 + 1 + 11 = 21 → doesn’t fit → append "a further", start "exploration"
+# Try "exercise": "exploration" (11) + 1 + 9 = 21 → doesn’t fit → append "exploration", start "exercise"
+# Append the final line "exercise"
+# So wrap_by_words returns: ["Konstantin is doing", "a further", "exploration", "exercise"]
 
 # 4
 
@@ -226,14 +285,37 @@ def clean_up(string):
                 
     return result
 
+# Second pass (aside from doing these in study sessions...)
+# Still couldn't do it but got closer. Wanted this to work:
 
-print(clean_up("---what's my +*& line?") == " what s my line ")
+def clean_up(string):
+    alphas_spaces = ''
+    
+    for char in string:
+        if char.isalpha() or char.isspace():
+            alphas_spaces += char
+        else:
+            alphas_spaces += ' '
+    
+    print(alphas_spaces) # '   what s my     line ', but then you're left with the same kinda problem
+    
+    result_list = alphas_spaces.split()
+    result = ' '.join(result_list) # when regina george said stop trying to make fetch happen it was about this solution
+    
+    return result
 
-# Second pass (aside from doing ones like this in study sessions...)
+# The best solution I've seen is:
 
-...
+def clean_up(text):
+    result = ''
+    for char in text:
+        if char.isalpha():
+            result += char
+        elif not result or result[-1] != ' ':
+            result += ' '
+    return result
 
-# 10
+# 10 (I think not much of this was 'mine')
 
 def century(year):
     century_number = (year - 1) // 100 + 1
@@ -254,5 +336,19 @@ def century(year):
             
     return f"{century_number}{suffix}"
 
-# Second pass:
+# Second pass (the century math in one line I still couldn't figure out):
 
+def century(year):
+    century_result_num = (year - 1) // 100 + 1
+    century_result = str(century_result_num)
+    
+    if century_result.endswith(('11', '12', '13')):
+        return century_result + 'th'
+    elif century_result.endswith('1'):
+        return century_result + 'st'
+    elif century_result.endswith('2'): 
+        return century_result + 'nd'
+    elif century_result.endswith('3'): 
+        return century_result + 'rd'
+    else:
+        return century_result + 'th'
